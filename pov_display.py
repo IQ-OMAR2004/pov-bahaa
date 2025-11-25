@@ -106,6 +106,8 @@ rotation_active = False
 current_rpm = DEFAULT_RPM
 stable_rpm = DEFAULT_RPM
 rpm_history = []
+last_rpm_print_time = time.monotonic()
+
 
 # Counters
 rotation_count = 0
@@ -132,6 +134,8 @@ DEBOUNCE_TIME = BUTTON_DEBOUNCE_TIME
 
 # Threading event for rotation sync
 rotation_end_event = threading.Event()
+
+
 
 # ============== GPIO SETUP ==============
 GPIO.setmode(GPIO.BCM)
@@ -583,6 +587,7 @@ def check_hall_sensor():
     global current_rpm, stable_rpm, rpm_history
     global last_hall_trigger_time, valid_rotation_count, noise_rejected_count
     global current_frame_index
+    global last_rpm_print_time
     
     current_state = GPIO.input(HALL_SENSOR_PIN)
     
@@ -656,10 +661,13 @@ def check_hall_sensor():
             # Ensure minimum time for LED update
             if time_per_line_micros < LED_UPDATE_TIME_US:
                 time_per_line_micros = LED_UPDATE_TIME_US
-            
-            # Status update (periodic)
-            if valid_rotation_count % 100 == 0:
+
+
+            # Status update (periodic: every 20 seconds)
+            now = time.monotonic()
+            if now - last_rpm_print_time >= 20:
                 print(f"RPM: {stable_rpm:.0f} | Line time: {time_per_line_micros}µs | Mode: {current_mode}")
+                last_rpm_print_time = now
         
         # GIF frame advancement
         if current_mode == "gif_sequence" and sequence_colors:
