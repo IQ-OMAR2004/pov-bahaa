@@ -29,14 +29,14 @@ BUTTON_IMAGE = 22                # Image/GIF cycle button
 
 # ============== DISPLAY SETTINGS ==============
 # Number of angular divisions per rotation
-# Higher = better resolution but requires slower motor
-# Recommendations based on motor RPM:
-#   100 divisions: 300-600 RPM (best quality)
-#   50 divisions:  600-900 RPM
-#   36 divisions:  900-1200 RPM
-#   24 divisions:  1200-1500 RPM
-#   16 divisions:  1500+ RPM
-NUM_DIVISIONS = 100
+# ACTUAL maximums based on 72 LEDs and 2800µs update time:
+#   70 divisions: ~300 RPM
+#   50 divisions: ~420 RPM
+#   40 divisions: ~530 RPM
+#   30 divisions: ~700 RPM
+#   24 divisions: ~870 RPM
+#   16 divisions: ~1300 RPM
+NUM_DIVISIONS = 40  # Optimized for 500 RPM (max ~42)
 
 # Brightness multiplier (0.0 to 1.0)
 # Lower values = dimmer but less power usage
@@ -49,7 +49,7 @@ LINES_TO_SHIFT = -15
 
 # ============== MOTOR/RPM SETTINGS ==============
 # Expected motor RPM (used for initial timing)
-DEFAULT_RPM = 600
+DEFAULT_RPM = 500
 
 # Valid RPM range (readings outside this are rejected as noise)
 MIN_RPM = 200

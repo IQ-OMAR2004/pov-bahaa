@@ -4,7 +4,7 @@ import math
 from pathlib import Path
 
 # number of slices (lines) in one full rotation
-NUM_SLICES = 100
+NUM_SLICES = 40
 # number of LEDs in both sides of the fan
 NUM_LEDS = 72
 # number of allowed colors in the image for quantization
