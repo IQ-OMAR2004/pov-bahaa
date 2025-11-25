@@ -408,17 +408,28 @@ def generate_filled_circle_data(radius_leds=28, color_rgb=(0, 100, 255)):
 def set_mode_circle():
     """Switch to circle shape mode"""
     global display_data, current_mode
+    old_mode = current_mode
     current_mode = "circle"
     display_data = generate_circle_data(radius_leds=28, color_rgb=(0, 255, 255))
-    print("Mode: CIRCLE (cyan)")
+    print(f"Mode: CIRCLE (cyan) | Changed from: {old_mode} | display_data lines: {len(display_data)}")
+    # Visual feedback
+    flash_mode_change()
 
 
 def set_mode_square():
     """Switch to square shape mode"""
     global display_data, current_mode
+    old_mode = current_mode
     current_mode = "square"
     display_data = generate_square_data(side_length_leds=24, color_rgb=(255, 0, 255))
-    print("Mode: SQUARE (magenta)")
+    
+    # Debug: Check color of center pixel
+    center_pixel = display_data[0][NUM_LEDS//2]
+    print(f"Mode: SQUARE (magenta) | Changed from: {old_mode} | display_data len: {len(display_data)}")
+    print(f"DEBUG: Square center pixel color: {center_pixel}")
+    
+    # Visual feedback
+    flash_mode_change()
 
 
 def set_mode_static_image():
@@ -486,9 +497,18 @@ def cycle_content():
 
 # ============== BUTTON HANDLING ==============
 
+def flash_mode_change():
+    """Flash LEDs to indicate mode change"""
+    # Brief flash of white to indicate change
+    for i in range(NUM_LEDS):
+        strip.setPixelColor(i, make_color(50, 50, 50))
+    strip.show()
+    time.sleep(0.05)
+
+
 def check_buttons():
     """Poll buttons for mode changes"""
-    global last_button_states, last_button_time, current_static_index
+    global last_button_states, last_button_time, current_static_index, current_mode
     
     current_time = time.time()
     
@@ -669,6 +689,12 @@ def display_current_line():
     
     # Start timing
     line_start_time = get_time_micros()
+    
+    # Debug: Print current mode and color occasionally
+    if current_line == 0 and rotation_count % 200 == 0 and rotation_count > 0:
+        print(f"DEBUG: Displaying {current_mode}, Frame len: {len(frame_data)}")
+        if frame_data:
+             print(f"DEBUG: Line 0 Center Pixel: {frame_data[0][NUM_LEDS//2]}")
     
     # Update LEDs
     if frame_data and line_to_show < len(frame_data):
