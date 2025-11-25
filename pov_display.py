@@ -488,7 +488,7 @@ def cycle_content():
 
 def check_buttons():
     """Poll buttons for mode changes"""
-    global last_button_states, last_button_time
+    global last_button_states, last_button_time, current_static_index
     
     current_time = time.time()
     
@@ -528,7 +528,6 @@ def check_buttons():
                     cycle_content()
                 else:
                     # Cycle back to static images
-                    global current_static_index
                     current_static_index = 0
                     set_mode_static_image()
             else:
