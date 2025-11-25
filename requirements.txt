@@ -1,0 +1,18 @@
+# POV Fan Display Dependencies
+# Install with: pip install -r requirements.txt
+
+# LED strip control (WS2812, WS2815, etc.)
+rpi-ws281x==5.0.0
+
+# GPIO control for Raspberry Pi
+RPi.GPIO==0.7.1
+
+# Image processing
+Pillow>=9.0.0
+
+# Numerical operations
+numpy>=1.21.0
+
+# Optional: Background scheduling (not required for main script)
+# APScheduler>=3.9.0
+
