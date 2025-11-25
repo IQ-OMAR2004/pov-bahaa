@@ -1,7 +1,7 @@
 # POV Holographic Fan Display
 
 A Persistence of Vision (POV) display system for Raspberry Pi with WS2815 LED strips.
-
+HEllo
 ## Features
 
 - **Static Images**: Display pre-processed images from `.npy` files
