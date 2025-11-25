@@ -411,6 +411,7 @@ def set_mode_circle():
     current_mode = "circle"
     display_data = generate_circle_data(radius_leds=28, color_rgb=(0, 255, 255))
     print("Mode: CIRCLE (cyan)")
+    flash_mode_change()
 
 
 def set_mode_square():
@@ -419,6 +420,7 @@ def set_mode_square():
     current_mode = "square"
     display_data = generate_square_data(side_length_leds=24, color_rgb=(255, 0, 255))
     print("Mode: SQUARE (magenta)")
+    flash_mode_change()
 
 
 def set_mode_static_image():
@@ -439,6 +441,7 @@ def set_mode_static_image():
         print(f"Mode: STATIC IMAGE - {img_file}")
     else:
         display_data = generate_circle_data()
+    flash_mode_change()
 
 
 def set_mode_gif_sequence():
@@ -459,11 +462,12 @@ def set_mode_gif_sequence():
         print(f"Mode: GIF SEQUENCE - {seq_name} ({len(sequence_colors)} frames)")
     else:
         display_data = generate_circle_data()
+    flash_mode_change()
 
 
 def cycle_content():
     """Cycle to next content in current mode"""
-    global current_static_index, current_gif_index
+    global current_static_index, current_gif_index, display_data
     
     if current_mode == "static_image" and static_images:
         current_static_index = (current_static_index + 1) % len(static_images)
@@ -474,25 +478,45 @@ def cycle_content():
     elif current_mode == "circle":
         # Cycle circle colors
         colors = [(0, 255, 255), (255, 255, 0), (255, 0, 255), (0, 255, 0)]
-        global display_data
-        # Get current and cycle
         display_data = generate_circle_data(radius_leds=28, color_rgb=colors[rotation_count % len(colors)])
         print(f"Circle color changed")
+        flash_mode_change()
     elif current_mode == "square":
         colors = [(255, 0, 255), (255, 255, 0), (0, 255, 255), (255, 128, 0)]
         display_data = generate_square_data(side_length_leds=24, color_rgb=colors[rotation_count % len(colors)])
         print(f"Square color changed")
+        flash_mode_change()
 
 
 # ============== BUTTON HANDLING ==============
 
 def flash_mode_change():
-    """Flash LEDs to indicate mode change"""
+    """Flash LEDs to indicate mode change and show preview"""
     # Brief flash of white to indicate change
     for i in range(NUM_LEDS):
         strip.setPixelColor(i, make_color(50, 50, 50))
     strip.show()
-    time.sleep(0.05)
+    time.sleep(0.1)
+    
+    # Show a static preview of the new mode (first line of display_data)
+    show_static_preview()
+
+
+def show_static_preview():
+    """Show a static preview of current display_data on LEDs"""
+    global display_data
+    
+    if not display_data or len(display_data) == 0:
+        return
+    
+    # Show the first line (or middle line for better preview)
+    preview_line = len(display_data) // 4  # Show at 90 degrees for variety
+    
+    if preview_line < len(display_data):
+        line_data = display_data[preview_line]
+        for i in range(min(NUM_LEDS, len(line_data))):
+            strip.setPixelColor(i, line_data[i])
+        strip.show()
 
 
 def check_buttons():
