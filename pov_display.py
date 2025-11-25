@@ -665,7 +665,7 @@ def check_hall_sensor():
 
             # Status update (periodic: every 20 seconds)
             now = time.monotonic()
-            if now - last_rpm_print_time >= 20:
+            if now - last_rpm_print_time >= 5:
                 print(f"RPM: {stable_rpm:.0f} | Line time: {time_per_line_micros}µs | Mode: {current_mode}")
                 last_rpm_print_time = now
         

@@ -46,7 +46,7 @@ BRIGHTNESS_RATIO = 0.3
 # Rotational offset to align image with starting position
 # Adjust this if your image appears rotated
 # Sensor is 30° from LED center, so offset by ~3 lines (30°/9° per line)
-LINES_TO_SHIFT = -12  # Was -15, adjusted +3 to shift image 30° right
+LINES_TO_SHIFT = -13  # Was -15, adjusted +3 to shift image 30° right
 
 # ============== MOTOR/RPM SETTINGS ==============
 # Expected motor RPM (used for initial timing)
